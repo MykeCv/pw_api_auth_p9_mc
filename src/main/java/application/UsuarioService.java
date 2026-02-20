@@ -1,7 +1,5 @@
 package application;
 
-import java.util.List;
-
 import application.representation.UsuarioRepresentation;
 import domain.Usuario;
 import infraestructure.UsuarioRepository;
@@ -12,21 +10,16 @@ import jakarta.inject.Inject;
 public class UsuarioService {
 
     @Inject
-    private UsuarioRepository usuarioRepository;
-
-    public List<Usuario> listarTodos() {
-        return this.usuarioRepository.listAll();
-    }
+    UsuarioRepository usuarioRepository;
 
     public UsuarioRepresentation findByUsuario(String user) {
-        return this.mapperToUR(this.usuarioRepository.find("usuario", user).firstResult());
-    }
+        Usuario u = usuarioRepository.find("usuario", user).firstResult();
+        if (u == null) return null;
 
-    private UsuarioRepresentation mapperToUR(Usuario usuario){
         UsuarioRepresentation ur = new UsuarioRepresentation();
-        ur.setUsuario(usuario.getUsuario());
-        ur.setPassword(usuario.getPassword());
-        ur.setRol(usuario.getRol());
+        ur.setUsuario(u.usuario);
+        ur.setPassword(u.password);
+        ur.setRol(u.rol);
         return ur;
     }
 }
